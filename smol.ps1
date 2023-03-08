@@ -36,12 +36,12 @@ $bitrate = $bitrate.toString()+"k"
 
 if (Test-Path "ffmpeg2pass-0.log") { rm .\ffmpeg2pass-0.log }
 if (Test-Path "log.txt") { rm .\log.txt }
-
-Start-Process -FilePath "ffmpeg" -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i", $args[0], "-vf scale=1280:720 -c:v libx264 -preset superfast -b:v $bitrate -pass 1 -an -f null NUL; ` " -NoNewWindow
+$filepath = $args[0]
+Start-Process -FilePath "ffmpeg" -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf scale=1280:720 -c:v libx264 -preset superfast -b:v $bitrate -pass 1 -an -f null NUL; ` " -NoNewWindow
 Show-Progress 1
 
 rm .\log.txt
-Start-Process -FilePath "ffmpeg"  -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i", $args[0], "-vf scale=1280:720 -c:v libx264 -preset superfast -b:v $bitrate -pass 2 -c:a aac -b:a 128k $filename" -NoNewWindow
+Start-Process -FilePath "ffmpeg"  -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf scale=1280:720 -c:v libx264 -preset superfast -b:v $bitrate -pass 2 -c:a aac -b:a 128k $filename" -NoNewWindow
 Show-Progress 2
 
 # Might be used in the future, idk
