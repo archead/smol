@@ -27,12 +27,11 @@ function Show-Progress
 $totalframes = ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 $args[0]
 
 $dur = ffprobe $args[0] -show_entries format=duration -of compact=p=0:nk=1 -v 0
-$filename = $args[0] -replace '.\\',''
-$filename = "smol_" + $filename
+$filename = Get-Item $args[0]
+$filename = "smol_" + $filename.Basename + ".mp4"
 $dur = [int]$dur
 $bitrate = [int]((200000 - $dur * 128) / $dur)
 $bitrate = $bitrate.toString()+"k"
-
 
 if (Test-Path "ffmpeg2pass-0.log") { rm .\ffmpeg2pass-0.log }
 if (Test-Path "log.txt") { rm .\log.txt }
@@ -41,7 +40,7 @@ Start-Process -FilePath "ffmpeg" -ArgumentList "-progress log.txt -hide_banner -
 Show-Progress 1
 
 rm .\log.txt
-Start-Process -FilePath "ffmpeg"  -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf scale=1280:720 -c:v libx264 -preset superfast -b:v $bitrate -pass 2 -c:a aac -b:a 128k $filename" -NoNewWindow
+Start-Process -FilePath "ffmpeg"  -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf scale=1280:720 -c:v libx264 -preset superfast -b:v $bitrate -pass 2 -c:a aac -b:a 128k `"$filename`"" -NoNewWindow
 Show-Progress 2
 
 # Might be used in the future, idk
@@ -50,4 +49,4 @@ Show-Progress 2
 rm .\ffmpeg2pass-0.log 
 rm .\log.txt
 
-Write-Output "Video saved as: $filename" 
+Write-Output "Video saved as: $filename"
