@@ -1,3 +1,16 @@
+#[console]::WindowWidth=50
+#[console]::WindowHeight=20
+
+function Get-ChildProcesses ($ParentProcessId) {
+    $filter = "parentprocessid = '$($ParentProcessId)'"
+    Get-CIMInstance -ClassName win32_process -filter $filter | Foreach-Object {
+            $_
+            if ($_.ParentProcessId -ne $_.ProcessId) {
+                Get-ChildProcesses $_.ProcessId
+            }
+        }
+}
+
 function Show-Progress 
 {
     param (
@@ -36,12 +49,17 @@ $bitrate = $bitrate.toString()+"k"
 if (Test-Path "ffmpeg2pass-0.log") { rm .\ffmpeg2pass-0.log }
 if (Test-Path "log.txt") { rm .\log.txt }
 $filepath = $args[0]
+Write-Output $filepath
+$procobj = Start-Process -FilePath "powershell" -ArgumentList "ffmpeg -i `"`"$filepath`"`" -c:v rawvideo -pix_fmt rgb24 -f caca - ; Start-Sleep 100" -PassThru
+$childproc = Get-ChildProcesses $procobj.Id | Select ProcessId
+
 Start-Process -FilePath "ffmpeg" -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf scale=1280:720 -c:v libx264 -preset superfast -b:v $bitrate -pass 1 -an -f null NUL; ` " -NoNewWindow
 Show-Progress 1
 
 rm .\log.txt
 Start-Process -FilePath "ffmpeg"  -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf scale=1280:720 -c:v libx264 -preset superfast -b:v $bitrate -pass 2 -c:a aac -b:a 128k `"$filename`"" -NoNewWindow
 Show-Progress 2
+
 
 # Might be used in the future, idk
 #ffmpeg -hide_banner -i $args[0] -vf scale=1280:720 -c:v libx264 -preset superfast -b:v $bitrate -c:a aac -b:a 128k $filename
@@ -50,3 +68,5 @@ rm .\ffmpeg2pass-0.log
 rm .\log.txt
 
 Write-Output "Video saved as: $filename"
+Stop-Process -Id $childproc.ProcessId
+
