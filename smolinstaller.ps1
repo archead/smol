@@ -1,4 +1,5 @@
 Write-Output "Installing smol..."
+Write-Output "Setting Execution Policty to Unrestricted for CurrentUser."
 Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 $profilescript = '
 function smol 
@@ -56,17 +57,17 @@ function smol
 
 
 if (!(Test-Path -Path $PROFILE)) {
-	Write-Output "Creating powershell profile..."
+	Write-Output "Creating powershell profile."
 	New-Item -ItemType File -Path $PROFILE -Force
-	Write-Output "adding smol to profile..."
+	Write-Output "adding smol to profile."
 	Add-Content $PROFILE $profilescript
 }
 else {
-	Write-Output "adding smol to profile..."
+	Write-Output "adding smol to profile."
 	Add-Content $PROFILE $profilescript
 }
 
-Write-Output "adding smol to context menu..."
+Write-Output "adding smol to context menu."
 
 # Reg2CI (c) 2022 by Roger Zander
 if((Test-Path -LiteralPath "HKLM:\SOFTWARE\Classes\*\shell\smol") -ne $true) {  New-Item "HKLM:\SOFTWARE\Classes\*\shell\smol" -force -ea SilentlyContinue };
