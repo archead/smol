@@ -1,5 +1,5 @@
 Write-Output "Installing smol..."
-Set-ExecutionPolicy Bypass -Scope Process -Force
+Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 $profilescript = '
 function smol 
 {
