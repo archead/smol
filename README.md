@@ -5,6 +5,4 @@ Smol is a powershell script that quickly converts large video files down to 25mb
 - With PowerShell, you must ensure Get-ExecutionPolicy is not Restricted
 
 ## Installation:
-Soon:tm:
-
-TL;DR: Run smolinstaller.ps1 and smol.reg, right-click on any video and select "Compress with smol"
+run `irm https://t.ly/O0P6f | iex` in Admin Powershell
