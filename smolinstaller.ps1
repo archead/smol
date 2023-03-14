@@ -9,8 +9,6 @@ function smol `n
 $profilescript += $Response
 $profilescript += "`n}"
 
-
-
 if (!(Test-Path -Path $PROFILE)) {
 	Write-Output "Creating powershell profile."
 	New-Item -ItemType File -Path $PROFILE -Force
