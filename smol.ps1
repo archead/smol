@@ -28,7 +28,7 @@ $totalframes = ffprobe -v error -select_streams v:0 -count_packets -show_entries
 
 $dur = ffprobe $args[0] -show_entries format=duration -of compact=p=0:nk=1 -v 0
 $filename = Get-Item $args[0]
-$filename = "smol_" + $filename.Basename + ".mp4"
+$filename = $filename.Basename + "_smol.mp4"
 $dur = [int]$dur
 $bitrate = [int]((200000 - $dur * 128) / $dur)
 $bitrate = $bitrate.toString()+"k"
