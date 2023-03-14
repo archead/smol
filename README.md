@@ -1,5 +1,8 @@
 # smol
-Smol is a powershell script that quickly converts large video files down to 25mb, which happens to be discord's upload limit ;)
+Smol is a powershell script that quickly* converts large video files down to 25mb, which happens to be discord's upload limit ;)
+
+<sub>*depends on file size and length<sub>
+
 ## Requirements
 - ffmpeg added to PATH
   - to install you can use either:
@@ -17,7 +20,7 @@ run `irm https://t.ly/O0P6f | iex` in Admin Powershell
 1. Right-click on any video
 2. Select `Compress with smol`
 3. Wait for the process to finish
-4. A new video file prefixed with `_smol` will appear
+4. A new video file postfixed with `_smol` will appear
 
 ![ezgif com-video-to-gif](https://user-images.githubusercontent.com/55419973/224909234-f550152d-56ee-4dc1-83d4-f4bf6bcd1280.gif)
 
