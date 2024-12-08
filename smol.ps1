@@ -61,17 +61,17 @@ Write-Output "Video Duration: `t$dur `bs"
 $filename = Get-Item $args[0]
 $filename = "smol_" + $filename.Basename + ".mp4"
 
-# Calculate the target bitrate
-$bitrate = [int](((10 * 8388.608) - ($dur * 128)) / $dur) # https://trac.ffmpeg.org/wiki/Encode/H.264#twopass
+$audiobitrate = 128
 
-Write-Output "Target filesize: `t<10MB"
-Write-Output "Target bitrate: `t$bitrate`bKbps"
+# Calculate the target bitrate
+$bitrate = [int](((10 * 8388.608) - ($dur * $audiobitrate)) / $dur)  # https://trac.ffmpeg.org/wiki/Encode/H.264#twopass
 
 # Adjust bitrate if it is too low
 if ($bitrate -lt 100){
     Write-Output "WARNING: Audio bitrate too high! Attempting to adjust automatically..."
     Write-Output "STATUS: Dropping audio bitrate to 64kbps"
-    $bitrate = [int](((10 * 8388.608) - ($dur * 64)) / $dur) # https://trac.ffmpeg.org/wiki/Encode/H.264#twopass
+    $audiobitrate = 64
+    $bitrate = [int](((10 * 8388.608) - ($dur * $audiobitrate)) / $dur)  # https://trac.ffmpeg.org/wiki/Encode/H.264#twopass
     Write-Output "Adjusted Target bitrate: $bitrate `bKbps"
 }
 
@@ -82,7 +82,8 @@ if ($bitrate -lt 100){
 }
 
 # Convert bitrate to string with "k" suffix
-$bitrate = $bitrate.toString() + "k"
+$bitrate = $bitrate.ToString() + "k"
+$audiobitrate = $audiobitrate.ToString() + "k"
 
 # Remove existing log files from previous runs
 Remove-Item .\log.txt, .\ffmpeg2pass-0.log, .\ffmpeg2pass-0.log.mbtree.temp, .\ffmpeg2pass-0.log.mbtree -ErrorAction SilentlyContinue
@@ -97,20 +98,20 @@ if (-not (Test-Path $args[0])) {
 $filepath = (Resolve-Path $args[0]).Path
 
 # Output codec information
-Write-Output "Video Codec: `t`tlibx264"
-Write-Output "Audio Codec: `t`tlibopus"
-
+Write-Output "Target filesize: `t<10MB"
+Write-Output "Video Codec: `t`tlibx264 @ $bitrate`bKbps"
+Write-Output "Audio Codec: `t`tlibopus @ $audiobitrate`bKbps"
 Write-Output "Beginning Transcode..."
 
 # Run FFmpeg for the first pass
-Start-Process -FilePath "ffmpeg" -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf `"scale=1280:-2`" -c:v libx264 -preset veryfast -b:v $bitrate -pass 1 -an -f null NUL; ` " -NoNewWindow
+Start-Process -FilePath "ffmpeg" -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf `"scale=1280:-2`" -c:v libx264 -preset slow -b:v $bitrate -pass 1 -an -f null NUL; ` " -NoNewWindow
 Show-Progress 1
 
 # Remove log file after the first pass
 Remove-Item .\log.txt -ErrorAction SilentlyContinue
 
 # Run FFmpeg for the second pass
-Start-Process -FilePath "ffmpeg"  -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf `"scale=1280:-2`" -c:v libx264 -preset veryfast -b:v $bitrate -pass 2 -c:a libopus -b:a 64k -ac 2 `"$filename`"" -NoNewWindow
+Start-Process -FilePath "ffmpeg" -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf `"scale=1280:-2`" -c:v libx264 -preset slow -b:v $bitrate -pass 2 -c:a libopus -b:a $audiobitrate -ac 2 `"$filename`"" -NoNewWindow
 Show-Progress 2
 
 # Clean up temporary log files after transcoding
