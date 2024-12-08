@@ -1,11 +1,12 @@
 # smol
-Smol is a powershell script that quickly* converts large video files down to 25mb, which happens to be discord's upload limit ;)
+Smol is a powershell script that quickly* converts large video files down to 10mb, which happens to be discord's upload limit ;)
 
 <sub>*depends on file size and length<sub>
 
 ## Requirements
 - ffmpeg added to PATH
-  - to install you can use either:
+  - to install you can use:
+    - `winget install ffmpeg` Provided by [Gyan](https://www.gyan.dev/ffmpeg/builds/)
     - [this](https://phoenixnap.com/kb/ffmpeg-windows) guide
     - `choco install ffmpeg` via [Chocolatey](https://chocolatey.org/) 
 - In case the install script fails for some reason, you must ensure Get-ExecutionPolicy is not Restricted
@@ -32,3 +33,8 @@ run `irm https://t.ly/O0P6f | iex` in Admin Powershell
 ## Removal
 1. run `delete_smol.reg`
 2. Delete the `smol()` function out of your `$PROFILE` file (more info [here](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_profiles?view=powershell-7.3))
+
+## Warning
+This is ideal for video files with a duration below 5 minutes
+
+Although this script will transcode anything as long as the final birate is not below 100Kbps this will most likely result in extremely undesirable results
