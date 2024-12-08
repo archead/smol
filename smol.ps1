@@ -64,14 +64,14 @@ $filename = "smol_" + $filename.Basename + ".mp4"
 $audiobitrate = 128
 
 # Calculate the target bitrate
-$bitrate = [int](((10 * 8388.608) - ($dur * $audiobitrate)) / $dur)  # https://trac.ffmpeg.org/wiki/Encode/H.264#twopass
+$bitrate = [int](((9.5 * 8388.608) - ($dur * $audiobitrate)) / $dur)  # https://trac.ffmpeg.org/wiki/Encode/H.264#twopass
 
 # Adjust bitrate if it is too low
 if ($bitrate -lt 100){
     Write-Output "WARNING: Audio bitrate too high! Attempting to adjust automatically..."
     Write-Output "STATUS: Dropping audio bitrate to 64kbps"
     $audiobitrate = 64
-    $bitrate = [int](((10 * 8388.608) - ($dur * $audiobitrate)) / $dur)  # https://trac.ffmpeg.org/wiki/Encode/H.264#twopass
+    $bitrate = [int](((9.5 * 8388.608) - ($dur * $audiobitrate)) / $dur)  # https://trac.ffmpeg.org/wiki/Encode/H.264#twopass
     Write-Output "Adjusted Target bitrate: $bitrate `bKbps"
 }
 
