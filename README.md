@@ -12,7 +12,7 @@ Smol is a powershell script that quickly* converts large video files down to 10m
 - In case the install script fails for some reason, you must ensure Get-ExecutionPolicy is not Restricted
 
 ## Installation:
-run `irm https://t.ly/O0P6f | iex` in Admin Powershell
+run `https://raw.githubusercontent.com/archead/smol/refs/heads/main/smolinstaller.ps1` in Admin Powershell
 
 ![ezgif com-video-to-gif](https://user-images.githubusercontent.com/55419973/224908409-9c4a41e2-0b47-42f1-8ec1-b720ebb731b5.gif)
 
