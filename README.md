@@ -4,11 +4,12 @@ Smol is a powershell script that quickly* converts large video files down to 10m
 <sub>*depends on file size and length<sub>
 
 ## Requirements
+### NOTE: ffmpeg is installed automatically with the script via winget
 - ffmpeg added to PATH
   - to install you can use:
-    - `winget install ffmpeg` Provided by [Gyan](https://www.gyan.dev/ffmpeg/builds/)
-    - [this](https://phoenixnap.com/kb/ffmpeg-windows) guide
-    - `choco install ffmpeg` via [Chocolatey](https://chocolatey.org/) 
+    1. `winget install ffmpeg` Provided by [Gyan](https://www.gyan.dev/ffmpeg/builds/)
+    2. [this](https://phoenixnap.com/kb/ffmpeg-windows) guide
+    3. `choco install ffmpeg` via [Chocolatey](https://chocolatey.org/) 
 - In case the install script fails for some reason, you must ensure Get-ExecutionPolicy is not Restricted
 
 ## Installation:
