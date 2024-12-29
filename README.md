@@ -1,5 +1,7 @@
-# smol
-Smol is a powershell script that quickly* converts large video files down to 10mb, which happens to be discord's upload limit ;)
+# smol 
+![GitHub Release](https://img.shields.io/github/v/release/archead/smol?display_name=release&style=for-the-badge&labelColor=black&color=%23228B22)
+
+Powershell script that quickly* converts large video files down to 10mb, which happens to be discord's upload limit ;)
 
 <sub>*depends on file size and length<sub>
 
