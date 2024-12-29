@@ -104,14 +104,12 @@ Write-Output "Audio Codec: `t`tlibopus @ $audiobitrate`bKbps"
 Write-Output "Beginning Transcode..."
 
 # Run FFmpeg for the first pass
-Start-Process -FilePath "ffmpeg" -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf `"scale=1280:-2`" -c:v libx264 -preset slow -b:v $bitrate -pass 1 -vsync cfr -f null NUL; ` " -NoNewWindow
 Show-Progress 1
 
 # Remove log file after the first pass
 Remove-Item .\log.txt -ErrorAction SilentlyContinue
 
 # Run FFmpeg for the second pass
-Start-Process -FilePath "ffmpeg" -ArgumentList "-progress log.txt -hide_banner -loglevel error -y -i `"$filepath`" -vf `"scale=1280:-2`" -c:v libx264 -preset slow -b:v $bitrate -pass 2 -c:a libopus -b:a $audiobitrate -ac 2 `"$filename`"" -NoNewWindow
 Show-Progress 2
 
 # Clean up temporary log files after transcoding
