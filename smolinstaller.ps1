@@ -33,6 +33,14 @@ if (!(Test-Path -Path $PROFILE)) {
 
 else {
 
+	# Backup existing profile
+	Write-Host "Backing up existing profile" -ForegroundColor Yellow
+	$ProfilePath = Get-Item $PROFILE
+	$ProfilePathDirectoryName = $ProfilePath.DirectoryName
+	$ProfilePathName = $ProfilePath.Name
+	$BackupFilePath = $ProfilePathDirectoryName + "\BACKUP_" + $ProfilePathName
+	Copy-Item -Path $PROFILE -Destination $BackupFilePath -Force
+
 	Write-Output "Profile exists. Updating smol function if it exists."
     # Read the existing profile content
     $profileContent = Get-Content $PROFILE -Raw
@@ -63,4 +71,6 @@ New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Classes\*\shell\smol' -Name '(defa
 New-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Classes\*\shell\smol\command' -Name '(default)' -Value 'powershell.exe smol \"%1\"' -PropertyType String -Force -ea SilentlyContinue;
 
 Write-Host "smol installed successfully! You can now close this window." -ForegroundColor Green
+Write-Host "IF SOMETHING WENT WRONG PLEASE RESTORE FROM PROFILE BACKUP:" -ForegroundColor Red
+Write-Host $BackupFilePath -ForegroundColor Red
 
